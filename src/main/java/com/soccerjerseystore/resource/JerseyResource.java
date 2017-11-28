@@ -3,6 +3,8 @@ package com.soccerjerseystore.resource;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
@@ -60,9 +62,49 @@ public class JerseyResource {
 		}
 	}
 	
+	@RequestMapping(value="/update/image", method=RequestMethod.POST)
+	public ResponseEntity updateImagePost(
+			@RequestParam("id") Long id,
+			HttpServletResponse response, HttpServletRequest request
+			) {
+		try {
+			Jersey jersey = jerseyService.findOne(id);
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			Iterator<String> it = multipartRequest.getFileNames();
+			MultipartFile multipartFile = multipartRequest.getFile(it.next());
+			String fileName = id+".png";
+			
+			Files.delete(Paths.get("src/main/resources/static/image/jersey/" + fileName));
+			
+			byte[] bytes = multipartFile. getBytes();
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File("src/main/resources/static/image/jersey/" + fileName)));
+			stream.write(bytes);
+			stream.close();
+			
+			return new ResponseEntity("Upload Success!!", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity("Upload failed!", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@RequestMapping("/jerseyList")
 	public List<Jersey> getJerseyList() {
 		return jerseyService.findAll();
+	}
+	
+	@RequestMapping(value="/update", method=RequestMethod.POST)
+	public Jersey updateJerseyPost(@RequestBody Jersey jersey) {
+		return jerseyService.save(jersey);
+	}
+	
+	@RequestMapping(value="/remove", method=RequestMethod.POST)
+	public ResponseEntity remove(
+			@RequestBody String id
+			) {
+		jerseyService.removeOne(Long.parseLong(id));
+		
+		return new ResponseEntity("Remove Success!", HttpStatus.OK);
 	}
 	
 	@RequestMapping("/{id}")
