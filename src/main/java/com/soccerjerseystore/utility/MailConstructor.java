@@ -11,7 +11,7 @@ import com.soccerjerseystore.domain.User;
 public class MailConstructor {
 	
 	@Autowired
-	private  Environment env;
+	private Environment env;
 	
 	public SimpleMailMessage constructNewUserEmail(User user, String password) {
 		String message = "\nPlease use the following credentials to log in and edit your personal information including your own password."
@@ -21,7 +21,7 @@ public class MailConstructor {
 		email.setTo(user.getEmail());
 		email.setSubject("Moe's Soccer Jersey Store - New User");
 		email.setText(message);
-		email.setTo(env.getProperty("support.email"));
+		email.setFrom(env.getProperty("support.email"));
 		
 		return email;
 	}
