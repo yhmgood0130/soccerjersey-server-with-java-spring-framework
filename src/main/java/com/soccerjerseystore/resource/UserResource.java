@@ -127,20 +127,23 @@ public class UserResource {
 		
 		SecurityConfig securityConfig = new SecurityConfig();
 		
-		if(newPassword != null && !newPassword.isEmpty() && !newPassword.equals("")) {
 			BCryptPasswordEncoder passwordEncoder = SecurityUtility.passwordEncoder();
 			String dbPassword = currentUser.getPassword();
-			if(currentPassword.equals(dbPassword)){
-				currentUser.setPassword(passwordEncoder.encode(newPassword));
-			} else {
-				return new ResponseEntity("Incorrect current password!", HttpStatus.BAD_REQUEST);
+			
+			if(null != currentPassword) {
+				if(passwordEncoder.matches(currentPassword, dbPassword)){
+					if(newPassword != null && !newPassword.isEmpty() && !newPassword.equals("")) {
+						currentUser.setPassword(passwordEncoder.encode(newPassword));
+					}
+					currentUser.setEmail(email);
+				} else {
+					return new ResponseEntity("Incorrect current password!", HttpStatus.BAD_REQUEST);
+				}
 			}
-		}
 		
 		currentUser.setFirstName(firstName);
 		currentUser.setLastName(lastName);
 		currentUser.setUsername(username);
-		currentUser.setEmail(email);
 		
 		userService.save(currentUser);
 		
@@ -149,7 +152,12 @@ public class UserResource {
 	
 	@RequestMapping("/getCurrentUser")
 	public User getCurrentUser(Principal principal){
-		User user = userService.findByUsername(principal.getName());
+		String username = principal.getName();
+		User user = new User();
+		
+		if(null != username) {
+			user = userService.findByUsername(username);
+		}
 		
 		return user;
 	}
