@@ -1,5 +1,6 @@
 package com.soccerjerseystore.service.impl;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.soccerjerseystore.domain.User;
+import com.soccerjerseystore.domain.UserPayment;
 import com.soccerjerseystore.domain.security.UserRole;
 import com.soccerjerseystore.repository.RoleRepository;
 import com.soccerjerseystore.repository.UserRepository;
@@ -38,6 +40,8 @@ public class UserServiceImpl implements UserService{
 			}
 			
 			user.getUserRoles().addAll(userRoles);
+			
+			user.setUserPaymentList(new ArrayList<UserPayment>());
 			
 			localUser = userRepository.save(user);
 		}
