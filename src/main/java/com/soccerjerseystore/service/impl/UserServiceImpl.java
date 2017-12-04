@@ -1,6 +1,7 @@
 package com.soccerjerseystore.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -11,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.soccerjerseystore.domain.User;
+import com.soccerjerseystore.domain.UserBilling;
 import com.soccerjerseystore.domain.UserPayment;
 import com.soccerjerseystore.domain.security.UserRole;
 import com.soccerjerseystore.repository.RoleRepository;
+import com.soccerjerseystore.repository.UserBillingRepository;
+import com.soccerjerseystore.repository.UserPaymentRepository;
 import com.soccerjerseystore.repository.UserRepository;
 import com.soccerjerseystore.service.UserService;
 
@@ -27,6 +31,12 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private UserBillingRepository userBillingRepository;
+	
+	@Autowired
+	private UserPaymentRepository userPaymentRepository;
 	
 	@Transactional
 	public User createUser(User user, Set<UserRole> userRoles) {
@@ -69,7 +79,36 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findByEmail(email);
 	}
 	
+	@Override
+	public void updateUserPaymentInfo(UserBilling userBilling, UserPayment userPayment, User user) {
+		save(user);
+		userBillingRepository.save(userBilling);
+		userPaymentRepository.save(userPayment);
+	}
 	
+	@Override
+	public void updateUserBilling(UserBilling userBilling, UserPayment userPayment, User user) {
+		userPayment.setUser(user);
+		userPayment.setUserBilling(userBilling);
+		userPayment.setDefaultPayment(true);
+		userBilling.setUserPayment(userPayment);
+		user.getUserPaymentList().add(userPayment);
+		save(user);
+	}
 	
+	@Override
+	public void setUserDefaultPayment(Long userPaymentId, User user) {
+		List<UserPayment> userPaymentList = (List<UserPayment>) userPaymentRepository.findAll();
+		
+		for (UserPayment userPayment : userPaymentList) {
+			if(userPayment.getId() == userPaymentId) {
+				userPayment.setDefaultPayment(true);
+				userPaymentRepository.save(userPayment);
+			} else {
+				userPayment.setDefaultPayment(false);
+				userPaymentRepository.save(userPayment);
+			}
+		}
+	}
 	
 }

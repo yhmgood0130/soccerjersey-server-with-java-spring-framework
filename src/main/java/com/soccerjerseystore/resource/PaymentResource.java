@@ -47,9 +47,21 @@ public class PaymentResource {
 			) {
 //		User user = userService.findByUsername(principal.getName());
 		
-		userPaymentService.removeById(Long.parseLong(id));
+		userPaymentService.removeById(Long.valueOf(id));
 		
-		return new ResponseEntity("Payment removed Successfully!", HttpStatus.OK);
+		return new ResponseEntity("Payment Removed Successfully!", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/setDefault", method=RequestMethod.POST)
+	public ResponseEntity setDefaultPaymentPost(
+			@RequestBody String id,
+			Principal principal
+			){
+		User user = userService.findByUsername(principal.getName());
+		
+		userService.setUserDefaultPayment(Long.parseLong(id), user);
+		
+		return new ResponseEntity("Payment Default Changed Successfully!", HttpStatus.OK);
 	}
 	
 	@RequestMapping("/getUserPaymentList")

@@ -5,9 +5,10 @@ import org.springframework.stereotype.Service;
 
 import com.soccerjerseystore.domain.UserPayment;
 import com.soccerjerseystore.repository.UserPaymentRepository;
+import com.soccerjerseystore.service.UserPaymentService;
 
 @Service
-public class UserPaymentServiceImpl {
+public class UserPaymentServiceImpl implements UserPaymentService {
 	@Autowired
 	private UserPaymentRepository userPaymentRepository;
 	
