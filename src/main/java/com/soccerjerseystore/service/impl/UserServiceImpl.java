@@ -14,11 +14,13 @@ import org.springframework.stereotype.Service;
 import com.soccerjerseystore.domain.User;
 import com.soccerjerseystore.domain.UserBilling;
 import com.soccerjerseystore.domain.UserPayment;
+import com.soccerjerseystore.domain.UserShipping;
 import com.soccerjerseystore.domain.security.UserRole;
 import com.soccerjerseystore.repository.RoleRepository;
 import com.soccerjerseystore.repository.UserBillingRepository;
 import com.soccerjerseystore.repository.UserPaymentRepository;
 import com.soccerjerseystore.repository.UserRepository;
+import com.soccerjerseystore.repository.UserShippingRepository;
 import com.soccerjerseystore.service.UserService;
 
 @Service
@@ -37,6 +39,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserPaymentRepository userPaymentRepository;
+	
+	@Autowired
+	private UserShippingRepository userShippingRepository;
 	
 	@Transactional
 	public User createUser(User user, Set<UserRole> userRoles) {
@@ -111,4 +116,26 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 	
+	@Override
+	public void updateUserShipping(UserShipping userShipping, User user) {
+		userShipping.setUser(user);
+		userShipping.setUserShippingDefault(true);
+		user.getUserShippingList().add(userShipping);
+		save(user);
+	}
+	
+	@Override
+	public void setUserDefaultShipping(Long userShippingId, User user) {
+		List<UserShipping> userShippingList = (List<UserShipping>) userShippingRepository.findAll();
+		
+		for (UserShipping userShipping : userShippingList) {
+			if(userShipping.getId() == userShippingId) {
+				userShipping.setUserShippingDefault(true);
+				userShippingRepository.save(userShipping);
+			} else {
+				userShipping.setUserShippingDefault(false);
+				userShippingRepository.save(userShipping);
+			}
+		}
+	}
 }

@@ -1,10 +1,12 @@
 package com.soccerjerseystore.service;
 
+import java.util.List;
 import java.util.Set;
 
 import com.soccerjerseystore.domain.User;
 import com.soccerjerseystore.domain.UserBilling;
 import com.soccerjerseystore.domain.UserPayment;
+import com.soccerjerseystore.domain.UserShipping;
 import com.soccerjerseystore.domain.security.UserRole;
 
 
@@ -24,4 +26,7 @@ public interface UserService {
 	
 	void setUserDefaultPayment(Long userPaymentId, User user);
 	
+	void updateUserShipping(UserShipping userShipping, User user);
+	
+	void setUserDefaultShipping(Long userShippingId, User user);
 }
