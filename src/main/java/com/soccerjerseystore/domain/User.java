@@ -50,6 +50,9 @@ public class User implements UserDetails, Serializable{
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
 	private List<UserShipping> userShippingList;
+	
+	@OneToOne(cascade=CascadeType.ALL, mappedBy= "user")
+	private ShoppingCart shoppingCart;
 
 	public Long getId() {
 		return id;
@@ -133,6 +136,14 @@ public class User implements UserDetails, Serializable{
 
 	public void setUserShippingList(List<UserShipping> userShippingList) {
 		this.userShippingList = userShippingList;
+	}
+
+	public ShoppingCart getShoppingCart() {
+		return shoppingCart;
+	}
+
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
 	}
 
 	@Override

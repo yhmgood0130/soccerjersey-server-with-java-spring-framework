@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.soccerjerseystore.domain.ShoppingCart;
 import com.soccerjerseystore.domain.User;
 import com.soccerjerseystore.domain.UserBilling;
 import com.soccerjerseystore.domain.UserPayment;
@@ -56,7 +57,12 @@ public class UserServiceImpl implements UserService{
 			
 			user.getUserRoles().addAll(userRoles);
 			
+			ShoppingCart shoppingCart = new ShoppingCart();
+			shoppingCart.setUser(user);
+			user.setShoppingCart(shoppingCart);
+			
 			user.setUserPaymentList(new ArrayList<UserPayment>());
+			user.setUserShippingList(new ArrayList<UserShipping>());
 			
 			localUser = userRepository.save(user);
 		}
