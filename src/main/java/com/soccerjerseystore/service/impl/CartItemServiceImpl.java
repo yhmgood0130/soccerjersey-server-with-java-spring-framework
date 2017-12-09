@@ -3,6 +3,8 @@ package com.soccerjerseystore.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +54,7 @@ public class CartItemServiceImpl implements CartItemService{
 		return cartItem;
 	}
 	
+	@Transactional
 	public void removeCartItem(CartItem cartItem) {
 		jerseyToCartItemRepository.deleteByCartItem(cartItem);
 		cartItemRepository.delete(cartItem);
@@ -77,12 +80,6 @@ public class CartItemServiceImpl implements CartItemService{
 	
 	public CartItem save(CartItem cartItem) {
 		return cartItemRepository.save(cartItem);
-	}
-
-	@Override
-	public CartItem addBookToCartItem(Jersey jersey, User user, int qty) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 //	public List<CartItem> findByOrder(Order order) {

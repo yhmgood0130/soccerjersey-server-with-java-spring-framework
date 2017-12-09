@@ -8,13 +8,17 @@ import com.soccerjerseystore.domain.ShoppingCart;
 import com.soccerjerseystore.domain.User;
 
 public interface CartItemService {
-	CartItem addBookToCartItem(Jersey jersey, User user, int qty);
+	CartItem addJerseyToCartItem(Jersey jersey, User user, int qty);
 	
 	List<CartItem> findByShoppingCart(ShoppingCart shoppingCart);
 	
 //	List<CartITem> findByOrder(Order order);
 	
 	CartItem updateCartItem(CartItem cartItem);
+	
+	void removeCartItem(CartItem cartItem);
+	
+	CartItem findById(Long id);
 	
 	CartItem save(CartItem cartItem);
 }

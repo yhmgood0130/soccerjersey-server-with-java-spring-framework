@@ -30,10 +30,10 @@ public class CartItem implements Serializable{
 	
 	@OneToMany(mappedBy = "cartItem")
 	@JsonIgnore
-	private List<JerseyToCartItem> jerseyToCartItem;
+	private List<JerseyToCartItem> jerseyToCartItemList;
 	
 	@ManyToOne
-	@JoinColumn(name="shopping_cart_Id")
+	@JoinColumn(name="shopping_cart_id")
 	@JsonIgnore
 	private ShoppingCart shoppingCart;
 
@@ -69,12 +69,12 @@ public class CartItem implements Serializable{
 		this.jersey = jersey;
 	}
 
-	public List<JerseyToCartItem> getJerseyToCartItem() {
-		return jerseyToCartItem;
+	public List<JerseyToCartItem> getJerseyToCartItemList() {
+		return jerseyToCartItemList;
 	}
 
-	public void setJerseyToCartItem(List<JerseyToCartItem> jerseyToCartItem) {
-		this.jerseyToCartItem = jerseyToCartItem;
+	public void setJerseyToCartItemList(List<JerseyToCartItem> jerseyToCartItemList) {
+		this.jerseyToCartItemList = jerseyToCartItemList;
 	}
 
 	public ShoppingCart getShoppingCart() {
