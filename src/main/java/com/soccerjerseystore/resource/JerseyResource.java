@@ -116,4 +116,11 @@ public class JerseyResource {
 		Jersey jersey = jerseyService.findOne(id);
 		return jersey;
 	}
+	
+	@RequestMapping(value = "/searchJersey", method=RequestMethod.POST)
+	public List<Jersey> searchJersey (@RequestBody String keyword) {
+		List<Jersey> jerseyList = jerseyService.blurrySearch(keyword);
+			
+		return jerseyList;
+	}
 }
